@@ -1,0 +1,94 @@
+"use client";
+
+import { TFilterTutor, TSortTutor } from "@/lib/types";
+import { createContext, ReactNode, useContext, useMemo, useState } from "react";
+import useSWR from "swr";
+import { useUserAppContext } from "./user.provider";
+import { IResponseTutors } from "@/lib/response-types";
+
+const sortList = [
+  { name: "Relevance", value: "relevance" },
+  { name: "Price: Higher", value: "price_higher" },
+  { name: "Price: Lower", value: "price_lower" },
+];
+
+interface IContext {
+  sort: TSortTutor;
+  setSort: (sort: TSortTutor) => void;
+  filter: TFilterTutor;
+  setFilter: (filter: TFilterTutor) => void;
+  sortList: typeof sortList;
+  data?: IResponseTutors["data"];
+  isLoading: boolean;
+}
+
+const ListViewContext = createContext<IContext>({
+  sort: "relevance",
+  setSort: () => {},
+  filter: {
+    price: { min: 0, max: 100 },
+    isNative: false,
+    countryOfBirth: "",
+    isSuperTutor: false,
+  },
+  setFilter: () => {},
+  sortList,
+  data: [],
+  isLoading: false,
+});
+
+export function ListViewProvider({ children }: { children: ReactNode }) {
+  const { country } = useUserAppContext();
+
+  const [sort, setSort] = useState<TSortTutor>("relevance");
+  const [filter, setFilter] = useState<TFilterTutor>({
+    price: { min: 0, max: 100 },
+    isNative: false,
+    countryOfBirth: country.country,
+    isSuperTutor: false,
+  });
+
+  const queryParams = useMemo(() => {
+    return new URLSearchParams({
+      sort,
+      country: country.country,
+    }).toString();
+  }, [sort, country.country]);
+
+  const { data, isLoading } = useSWR(
+    `/api/tutor?${queryParams}`,
+    async () =>
+      (await fetch(`/api/tutor?${queryParams}`).then((res) => res.json())) as {
+        data: IResponseTutors;
+        status: number;
+      },
+  );
+
+  console.log({ queryParams, data });
+
+  return (
+    <ListViewContext.Provider
+      value={{
+        sort,
+        setSort,
+        filter,
+        setFilter,
+        sortList,
+        data: data?.data.data,
+        isLoading,
+      }}
+    >
+      {children}
+    </ListViewContext.Provider>
+  );
+}
+
+export function useListViewContext() {
+  const context = useContext(ListViewContext);
+  if (!context) {
+    throw new Error(
+      "useListViewContext must be used within a ListViewProvider",
+    );
+  }
+  return context;
+}
