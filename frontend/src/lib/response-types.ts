@@ -37,6 +37,7 @@ interface Daum {
   user_id: UserId;
   languagesSpoken: LanguagesSpoken[];
   photo: string;
+  isSuperTutor: boolean;
 }
 
 interface DaumRaw extends Omit<Daum, "photo"> {

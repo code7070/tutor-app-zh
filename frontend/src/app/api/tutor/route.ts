@@ -5,6 +5,7 @@ import { endpointAPI } from "@/lib/utils";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const paramSort = searchParams.get("sort") ?? "relevance";
+  const paramLang = searchParams.get("lang") ?? "all";
   const sort = paramSort as TSortTutor;
 
   const endpoint = endpointAPI("tutors?populate=*");
@@ -31,6 +32,7 @@ export async function GET(request: Request) {
       user_id: i.user_id,
       languagesSpoken: i.languagesSpoken,
       photo: `${process.env.API_ENDPOINT}${i.photo.url}`,
+      isSuperTutor: i.isSuperTutor,
     })),
   };
 
@@ -44,8 +46,14 @@ export async function GET(request: Request) {
     );
   else if (sort === "rating")
     crafted.data = crafted.data.sort(
-      (a, b) => (a.rating || 0) - (b.rating || 0),
+      (a, b) => (b.rating || 0) - (a.rating || 0),
     );
+
+  if (paramLang && paramLang !== "all") {
+    crafted.data = crafted.data.filter(
+      (i) => i.nativeLanguage?.toLowerCase() === paramLang.toLowerCase(),
+    );
+  }
 
   return Response.json({ data: crafted, status: 200 });
 }

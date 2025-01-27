@@ -7,9 +7,12 @@ import { useUserAppContext } from "./user.provider";
 import { IResponseTutors } from "@/lib/response-types";
 
 const sortList = [
+  { name: "Price: higher first", value: "price-higher" },
+  { name: "Price: lower first", value: "price-lower" },
+  { name: "Reviews", value: "reviews" },
+  { name: "Popularity", value: "popularity" },
+  { name: "Rating", value: "rating" },
   { name: "Relevance", value: "relevance" },
-  { name: "Price: Higher", value: "price_higher" },
-  { name: "Price: Lower", value: "price_lower" },
 ];
 
 interface IContext {
@@ -51,7 +54,7 @@ export function ListViewProvider({ children }: { children: ReactNode }) {
   const queryParams = useMemo(() => {
     return new URLSearchParams({
       sort,
-      country: country.country,
+      lang: country.country,
     }).toString();
   }, [sort, country.country]);
 

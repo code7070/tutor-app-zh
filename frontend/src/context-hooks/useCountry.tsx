@@ -5,7 +5,7 @@ import { createContext } from "react";
 
 export interface ICountryContext {
   country: string;
-  setCountry: (country: string) => void;
+  setCountry: (value: string) => void;
   options: { name: string; code: string; flag: string }[];
 }
 
@@ -14,7 +14,7 @@ export const CountryContext = createContext<ICountryContext>({
   setCountry: () => {},
   options: [
     { name: "Around the world", code: "all", flag: "🌎" },
-    { name: "English", code: "US", flag: "🇬🇧" },
+    { name: "English", code: "EN", flag: "🇬🇧" },
     { name: "Indonesia", code: "ID", flag: "🇮🇩" },
     { name: "China", code: "CN", flag: "🇨🇳" },
     { name: "Spain", code: "ES", flag: "🇪🇸" },
@@ -32,11 +32,11 @@ export default function useCountry() {
     throw new Error("useCountry must be used within a CountryProvider");
   }
 
-  useEffect(() => {
-    if (country) {
-      localStorage.setItem("app-country", country);
-    }
-  }, [country]);
+  // useEffect(() => {
+  //   if (country) {
+  //     localStorage.setItem("app-country", country);
+  //   }
+  // }, [country]);
 
   // Muat negara yang disimpan di localStorage saat komponen pertama kali di-render
   useEffect(() => {
@@ -46,5 +46,10 @@ export default function useCountry() {
     }
   }, []);
 
-  return { ...context, setCountry, country };
+  function doSetCountry(value: string) {
+    localStorage.setItem("app-country", value);
+    setCountry(value);
+  }
+
+  return { ...context, setCountry: doSetCountry, country };
 }

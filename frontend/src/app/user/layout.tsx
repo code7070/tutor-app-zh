@@ -8,8 +8,10 @@ export default function UserLayout({
 }) {
   return (
     <UserAppProvider>
-      {children}
-      <Navbar />
+      <div className="pb-24">
+        {children}
+        <Navbar />
+      </div>
     </UserAppProvider>
   );
 }

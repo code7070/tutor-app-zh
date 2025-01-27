@@ -15,6 +15,7 @@ import { ArrowLeft, ChevronRight } from "lucide-react";
 
 export default function LangSelector() {
   const { country } = useUserAppContext();
+
   const countryName = useMemo(() => {
     return country.options.find((i) => i.code === country.country)?.name;
   }, [country]);
@@ -52,18 +53,22 @@ export default function LangSelector() {
         </SheetHeader>
         <div className="flex flex-col gap-4">
           {country.options.map((i) => (
-            <Button
-              key={i.code}
-              variant="outline"
-              className="justify-between gap-3 !p-4 !h-auto font-semibold"
-              size="lg"
-            >
-              <div className="flex items-center gap-2">
-                <div>{i.flag}</div>
-                <div>{i.name}</div>
-              </div>
-              <ChevronRight />
-            </Button>
+            <SheetClose key={i.code} asChild>
+              <Button
+                variant="outline"
+                className="justify-between gap-3 !p-4 !h-auto font-semibold"
+                size="lg"
+                onClick={() => {
+                  country.setCountry(i.code);
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <div>{i.flag}</div>
+                  <div>{i.name}</div>
+                </div>
+                <ChevronRight />
+              </Button>
+            </SheetClose>
           ))}
         </div>
       </SheetContent>
