@@ -1,0 +1,68 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tutors",
+  "info": {
+    "singularName": "tutor",
+    "pluralName": "tutors",
+    "displayName": "Tutor",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "tutor"
+    },
+    "countryOfBirth": {
+      "type": "string"
+    },
+    "nativeLanguage": {
+      "type": "string"
+    },
+    "feePerLesson": {
+      "type": "integer"
+    },
+    "experienceInYears": {
+      "type": "integer"
+    },
+    "bioHighlight": {
+      "type": "string"
+    },
+    "bioLong": {
+      "type": "text"
+    },
+    "rating": {
+      "type": "decimal"
+    },
+    "isRefundable": {
+      "type": "boolean"
+    },
+    "isVerified": {
+      "type": "boolean"
+    },
+    "languagesSpoken": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tutor-language.fields"
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

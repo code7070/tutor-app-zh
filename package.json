@@ -1,0 +1,14 @@
+{
+  "name": "tutor-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev-fe": "cd new-frontend && pnpm dev",
+    "dev-be": "cd backend && pnpm dev",
+    "dev": "concurrently \"pnpm dev-fe\" \"pnpm dev-be\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_tutor_language_fields",
+  "info": {
+    "displayName": "Fields",
+    "icon": "bulletList",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "language": {
+      "type": "enumeration",
+      "enum": [
+        "English",
+        "Indonesia",
+        "Chinese (Mandarin)",
+        "France",
+        "Japanese",
+        "Spain",
+        "Korean"
+      ]
+    },
+    "proficiency": {
+      "type": "enumeration",
+      "enum": [
+        "Native",
+        "C2",
+        "C1",
+        "B2",
+        "B1",
+        "A2",
+        "A1"
+      ]
+    }
+  }
+}
