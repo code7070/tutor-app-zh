@@ -13,7 +13,7 @@ export default function TutorListView() {
       {data?.map((i) => (
         <Link
           key={i.documentId}
-          href={`/tutor/${i.documentId}`}
+          href={`/user/tutor/${i.documentId}`}
           className="bg-white flex flex-col items-start gap-3 p-4  hover:bg-app-pink-shade/10"
         >
           <div className="flex items-start gap-4 w-full">

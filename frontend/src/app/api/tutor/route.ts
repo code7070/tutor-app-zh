@@ -12,7 +12,6 @@ export async function GET(request: Request) {
   const res = (await fetch(endpoint).then((res) =>
     res.json(),
   )) as IResponseTutorsRaw;
-  console.log({ endpoint, res });
 
   const crafted = {
     meta: res.meta,

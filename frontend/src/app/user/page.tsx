@@ -8,7 +8,7 @@ import { Heart } from "lucide-react";
 export default function UserPage() {
   return (
     <div>
-      <section className="flex w-full gap-3 justify-between items-center pt-6 px-4 bg-white">
+      <section className="flex w-full gap-3 justify-between items-center pt-6 px-4 bg-white ">
         <LangSelector />
         <Heart />
       </section>
