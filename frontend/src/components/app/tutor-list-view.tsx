@@ -65,9 +65,17 @@ export default function TutorListView() {
             <div className="flex gap-2 items-center">
               <Quote size={14} className="fill-app-gray2" />
               Speaks{" "}
-              {[i.nativeLanguage && getCountry().name(i.nativeLanguage)].join(
-                ", ",
-              )}
+              {[
+                i.nativeLanguage &&
+                  `${getCountry().name(i.nativeLanguage)} (Native)`,
+                ...i.languagesSpoken
+                  .slice(0, 1)
+                  .map((l) => `${l.language} (${l.proficiency})`),
+                i.languagesSpoken.length > 0 &&
+                  `+${i.languagesSpoken.length - 1}`,
+              ]
+                .filter(Boolean)
+                .join(", ")}
             </div>
           </div>
         </Link>

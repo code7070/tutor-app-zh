@@ -26,7 +26,7 @@ export const CountryContext = createContext<ICountryContext>({
 
 export default function useCountry() {
   const context = useContext(CountryContext);
-  const [country, setCountry] = useState("all");
+  const [country, setCountry] = useState("");
 
   if (!context) {
     throw new Error("useCountry must be used within a CountryProvider");
@@ -43,7 +43,7 @@ export default function useCountry() {
     const savedCountry = localStorage.getItem("app-country");
     if (savedCountry) {
       setCountry(savedCountry);
-    }
+    } else setCountry("all");
   }, []);
 
   function doSetCountry(value: string) {

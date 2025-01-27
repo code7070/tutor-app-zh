@@ -60,14 +60,16 @@ export function ListViewProvider({ children }: { children: ReactNode }) {
 
   const { data, isLoading } = useSWR(
     `/api/tutor?${queryParams}`,
-    async () =>
-      (await fetch(`/api/tutor?${queryParams}`).then((res) => res.json())) as {
-        data: IResponseTutors;
-        status: number;
-      },
+    country.country
+      ? async () =>
+          (await fetch(`/api/tutor?${queryParams}`).then((res) =>
+            res.json(),
+          )) as {
+            data: IResponseTutors;
+            status: number;
+          }
+      : null,
   );
-
-  console.log({ queryParams, data });
 
   return (
     <ListViewContext.Provider
