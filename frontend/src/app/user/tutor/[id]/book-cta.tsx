@@ -160,24 +160,27 @@ export default function BookTutorCTA({
                 We&apos;ll tell {appointmentData?.tutor.name} you&apos;re ready
                 to start!
               </SheetTitle>
-              <SheetDescription className="text-left text-black font-medium text-lg">
-                Your lesson is{" "}
-                {format(
-                  `${appointmentData?.schedule.date} ${appointmentData?.schedule.time.substring(0, 8)}`,
-                  "EEEE, MMMM d, HH:mm",
-                )}
-                -
-                {format(
-                  new Date(
+              {appointmentData && (
+                <SheetDescription className="text-left text-black font-medium text-lg">
+                  Your lesson is{" "}
+                  {format(
+                    `${appointmentData?.schedule.date} ${appointmentData?.schedule.time.substring(0, 8)}`,
+                    "EEEE, MMMM d, HH:mm",
+                  )}
+                  -
+                  {format(
                     new Date(
-                      `${appointmentData?.schedule.date} ${appointmentData?.schedule.time.substring(0, 8)}`,
-                    ).getTime() +
-                      (appointmentData?.duration === "dur25" ? 25 : 50) * 60000,
-                  ),
-                  "HH:mm",
-                )}{" "}
-                ({appointmentData?.duration.slice(3) + "min session"})
-              </SheetDescription>
+                      new Date(
+                        `${appointmentData?.schedule.date} ${appointmentData?.schedule.time.substring(0, 8)}`,
+                      ).getTime() +
+                        (appointmentData?.duration === "dur25" ? 25 : 50) *
+                          60000,
+                    ),
+                    "HH:mm",
+                  )}{" "}
+                  ({appointmentData?.duration.slice(3) + "min session"})
+                </SheetDescription>
+              )}
             </SheetHeader>
             <div className="pb-10 flex flex-col ">
               <Link href="/user/schedule" className="block w-full">
