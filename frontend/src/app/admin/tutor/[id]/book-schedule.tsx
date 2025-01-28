@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Sheet,
   SheetContent,
@@ -7,37 +8,39 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Coffee, Moon, Sun, Sunset } from "lucide-react";
+import { ArrowLeft, Moon, Sun } from "lucide-react";
 import { useMemo, useState } from "react";
 import { addDays, format, formatRelative, isToday, isTomorrow } from "date-fns";
-import { IResponseTutorSchedule } from "@/app/api/tutor/[id]/schedule/route";
-import useTimeGrouping from "./useTimeGrouping";
 // import { format as formatTz} from "date-fns-tz"
 
 export default function BookSchedule({
   isOpen,
   onOpenChange,
-  schedule,
 }: {
   isOpen: boolean;
   onOpenChange: (e: boolean) => void;
-  schedule: IResponseTutorSchedule;
 }) {
   const [tab, setTab] = useState<"25" | "50">("25");
 
   const [daySelected, setDaySelected] = useState(new Date());
 
-  console.log(schedule);
-  const timeset = useMemo(() => {
-    if (schedule && schedule.data && schedule.data.data.length > 0) {
-      return schedule.data.data.filter(
-        (i) => i.date === format(daySelected, "yyyy-MM-dd"),
-      );
-    }
-    return [];
-  }, [schedule, daySelected]);
-
-  const timeGroup = useTimeGrouping(timeset.map((i) => i.time));
+  const timeSlots = {
+    "25": {
+      afternoon: ["3:00 PM", "3:30 PM"],
+      evening: [
+        "8:00 PM",
+        "8:30 PM",
+        "10:00 PM",
+        "10:30 PM",
+        "11:00 PM",
+        "11:30 PM",
+      ],
+    },
+    "50": {
+      afternoon: ["2:00 PM", "2:30 PM", "4:00 PM"],
+      evening: ["7:00 PM", "7:30 PM", "9:00 PM", "9:30 PM", "10:00 PM"],
+    },
+  };
 
   const today = new Date();
 
@@ -71,13 +74,6 @@ export default function BookSchedule({
   const offsetHours = -(offset / 60);
   const gmtOffset = `GMT ${offsetHours >= 0 ? "+" : ""}${offsetHours}:00`;
 
-  const iconSet = {
-    Morning: <Coffee className="size-5" />,
-    Afternoon: <Sun className="size-5" />,
-    Evening: <Sunset className="size-5" />,
-    Night: <Moon className="size-5" />,
-  };
-
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="h-screen" withClose={false}>
@@ -93,12 +89,10 @@ export default function BookSchedule({
           </div>
           <div className="flex-1">
             <SheetTitle className="text-2xl font-bold ">
-              {tab} min lesson
+              25 min lesson
             </SheetTitle>
             <SheetDescription className="font-medium">
-              {tab === "50"
-                ? "To conversating and more fluent"
-                : "To discuss your level and learning plan"}
+              To discuss your level and learning plan
             </SheetDescription>
           </div>
         </SheetHeader>
@@ -113,7 +107,7 @@ export default function BookSchedule({
             </TabsList>
           </Tabs>
 
-          <div className="space-y-4 ">
+          <div className="space-y-4 max-h-[calc(100vh-160px)] overflow-y-auto">
             {/* Calendar */}
             <div className="px-4 mb-6">
               <div className="flex justify-between items-center mb-4">
@@ -154,64 +148,46 @@ export default function BookSchedule({
             </div>
 
             {/* Time Slots */}
-            <div className="px-4 space-y-6 max-h-[calc(100vh-350px)] overflow-y-auto pb-40">
-              {timeGroup.map((tg) => {
-                return (
-                  <div className="py-4" key={tg.label}>
-                    <div className="flex items-center gap-2 mb-4">
-                      {iconSet[tg.label]}
-                      <h3 className="font-semibold">{tg.label}</h3>
-                    </div>
-                    <div className="grid gap-2">
-                      {tg.timelist.map((time) => (
-                        <Button
-                          key={time}
-                          variant="outline"
-                          className="w-full justify-center py-6"
-                        >
-                          {time.substring(0, 5)}
-                        </Button>
-                      ))}
-                    </div>
+            <div className="px-4 space-y-6">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Sun className="h-5 w-5" />
+                    <h3 className="font-semibold">Afternoon</h3>
                   </div>
-                );
-              })}
+                  <div className="grid gap-2">
+                    {timeSlots[tab].afternoon.map((time) => (
+                      <Button
+                        key={time}
+                        variant="outline"
+                        className="w-full justify-center py-6"
+                      >
+                        {time}
+                      </Button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
 
-              {/* <div className="py-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <Sun className="h-5 w-5" />
-                  <h3 className="font-semibold">Afternoon</h3>
-                </div>
-                <div className="grid gap-2">
-                  {timeSlots[tab].afternoon.map((time) => (
-                    <Button
-                      key={time}
-                      variant="outline"
-                      className="w-full justify-center py-6"
-                    >
-                      {time}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="py-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <Moon className="h-5 w-5" />
-                  <h3 className="font-semibold">Evenings</h3>
-                </div>
-                <div className="grid gap-2">
-                  {timeSlots[tab].evening.map((time) => (
-                    <Button
-                      key={time}
-                      variant="outline"
-                      className="w-full justify-center py-6"
-                    >
-                      {time}
-                    </Button>
-                  ))}
-                </div>
-              </div> */}
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Moon className="h-5 w-5" />
+                    <h3 className="font-semibold">Evenings</h3>
+                  </div>
+                  <div className="grid gap-2">
+                    {timeSlots[tab].evening.map((time) => (
+                      <Button
+                        key={time}
+                        variant="outline"
+                        className="w-full justify-center py-6"
+                      >
+                        {time}
+                      </Button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>

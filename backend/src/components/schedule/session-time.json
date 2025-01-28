@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_schedule_session_times",
+  "info": {
+    "displayName": "session-time",
+    "icon": "bulletList",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {}
+}

@@ -71,10 +71,26 @@
       "type": "boolean",
       "default": false
     },
-    "lesson": {
+    "time_session50": {
+      "type": "component",
+      "repeatable": true,
+      "component": "schedule.session-time"
+    },
+    "time_session25": {
+      "type": "component",
+      "repeatable": true,
+      "component": "schedule.session-time"
+    },
+    "schedules": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::schedule.schedule",
+      "mappedBy": "tutor"
+    },
+    "appointment": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::lesson.lesson",
+      "target": "api::appointment.appointment",
       "mappedBy": "tutor"
     }
   }

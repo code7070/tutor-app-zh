@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_schedule_session_date_times",
+  "info": {
+    "displayName": "session-date-time",
+    "icon": "bulletList",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "date": {
+      "type": "date"
+    },
+    "time": {
+      "type": "component",
+      "repeatable": true,
+      "component": "schedule.session-time"
+    }
+  }
+}

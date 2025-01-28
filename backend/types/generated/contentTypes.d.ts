@@ -369,35 +369,72 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiLessonLesson extends Struct.CollectionTypeSchema {
-  collectionName: 'lessons';
+export interface ApiAppointmentAppointment extends Struct.CollectionTypeSchema {
+  collectionName: 'appointments';
   info: {
     description: '';
-    displayName: 'Lesson';
-    pluralName: 'lessons';
-    singularName: 'lesson';
+    displayName: 'appointment';
+    pluralName: 'appointments';
+    singularName: 'appointment';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
+    cancelAt: Schema.Attribute.DateTime;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    duration: Schema.Attribute.String;
+    doneAt: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::lesson.lesson'
+      'api::appointment.appointment'
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    start_time: Schema.Attribute.DateTime;
-    statusLesson: Schema.Attribute.Enumeration<
-      ['Not Started', 'Ongoing', 'Done', 'Cancel']
+    schedule: Schema.Attribute.Relation<'oneToOne', 'api::schedule.schedule'>;
+    statusAppointment: Schema.Attribute.Enumeration<
+      ['Not Started', 'Done', 'Cancel']
     >;
     student: Schema.Attribute.Relation<'oneToOne', 'api::student.student'>;
     tutor: Schema.Attribute.Relation<'oneToOne', 'api::tutor.tutor'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiScheduleSchedule extends Struct.CollectionTypeSchema {
+  collectionName: 'schedules';
+  info: {
+    description: '';
+    displayName: 'Schedule';
+    pluralName: 'schedules';
+    singularName: 'schedule';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    appointment: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::appointment.appointment'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    date: Schema.Attribute.Date;
+    isBooked: Schema.Attribute.Boolean;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::schedule.schedule'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    time: Schema.Attribute.Time;
+    tutor: Schema.Attribute.Relation<'manyToOne', 'api::tutor.tutor'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -416,10 +453,13 @@ export interface ApiStudentStudent extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    appointment: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::appointment.appointment'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    lesson: Schema.Attribute.Relation<'oneToOne', 'api::lesson.lesson'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -452,6 +492,10 @@ export interface ApiTutorTutor extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    appointment: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::appointment.appointment'
+    >;
     bioHighlight: Schema.Attribute.String;
     bioLong: Schema.Attribute.Text;
     countryOfBirth: Schema.Attribute.String;
@@ -465,7 +509,6 @@ export interface ApiTutorTutor extends Struct.CollectionTypeSchema {
     isSuperTutor: Schema.Attribute.Boolean;
     isVerified: Schema.Attribute.Boolean;
     languagesSpoken: Schema.Attribute.Component<'tutor-language.fields', true>;
-    lesson: Schema.Attribute.Relation<'oneToOne', 'api::lesson.lesson'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::tutor.tutor'> &
       Schema.Attribute.Private;
@@ -474,6 +517,9 @@ export interface ApiTutorTutor extends Struct.CollectionTypeSchema {
     photo: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     publishedAt: Schema.Attribute.DateTime;
     rating: Schema.Attribute.Decimal;
+    schedules: Schema.Attribute.Relation<'oneToMany', 'api::schedule.schedule'>;
+    time_session25: Schema.Attribute.Component<'schedule.session-time', true>;
+    time_session50: Schema.Attribute.Component<'schedule.session-time', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -995,7 +1041,8 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::lesson.lesson': ApiLessonLesson;
+      'api::appointment.appointment': ApiAppointmentAppointment;
+      'api::schedule.schedule': ApiScheduleSchedule;
       'api::student.student': ApiStudentStudent;
       'api::tutor.tutor': ApiTutorTutor;
       'plugin::content-releases.release': PluginContentReleasesRelease;

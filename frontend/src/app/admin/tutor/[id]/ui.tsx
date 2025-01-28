@@ -3,23 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { IResponseTutorDetail } from "@/lib/response-types";
 import { getCountry, getFlagEmoji } from "@/lib/utils";
-import {
-  ArrowLeft,
-  BadgeCheck,
-  Heart,
-  Play,
-  Share,
-  ShieldCheck,
-  Star,
-  TrendingUp,
-} from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { BadgeCheck, Play, ShieldCheck, Star, TrendingUp } from "lucide-react";
+import { useParams } from "next/navigation";
 import useSWR from "swr";
 import PlaceholderTutorDetail from "./placeholder";
 import { Badge } from "@/components/ui/badge";
 import BookTutorCTA from "./book-cta";
-import { addDays, format, isToday } from "date-fns";
-import { IResponseTutorSchedule } from "@/app/api/tutor/[id]/schedule/route";
 
 async function fetcher(
   id?: string,
@@ -27,42 +16,12 @@ async function fetcher(
   return await (await fetch(`/api/tutor/${id}`)).json();
 }
 
-async function fetcherSchedule(
-  id?: string,
-  dateRange?: string[],
-): Promise<IResponseTutorSchedule> {
-  return await (
-    await fetch(`/api/tutor/${id}/schedule?dateRange=${dateRange?.join(",")}`)
-  ).json();
-}
-
 export default function TutorDetailUI() {
   const params = useParams();
-
-  const router = useRouter();
 
   const { data, isLoading } = useSWR(
     `/tutor/${params.id}`,
     async () => await fetcher(params.id as string),
-  );
-
-  const dateRange = Array.from({ length: 7 }, (_, index) => {
-    const date = addDays(new Date(), index);
-    return {
-      date: format(date, "d"),
-      dayName: format(date, "EE"),
-      isToday: isToday(date),
-      raw: date,
-    };
-  });
-
-  const { data: dataSchedule, isLoading: isLoadingSchedule } = useSWR(
-    `/tutor/${params.id}/schedule`,
-    async () =>
-      await fetcherSchedule(
-        params.id as string,
-        dateRange.map((d) => d.raw.toISOString()),
-      ),
   );
 
   const tutor = data?.data.data;
@@ -71,29 +30,6 @@ export default function TutorDetailUI() {
 
   return (
     <div>
-      <section className="flex justify-between items-center gap-2 p-4">
-        <Button variant="ghost" size="icon" onClick={() => router.back()}>
-          <ArrowLeft className="!size-6" />
-        </Button>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => {
-              window.navigator.share({
-                title: "Find your best language tutor in TutorApp",
-                text: `${tutor?.name} - Professional Language Tutor on TutorApp`,
-                url: `https://tutorapp.dev/tutor/${tutor?.documentId}`,
-              });
-            }}
-          >
-            <Share className="!size-6" />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <Heart className="!size-6" />
-          </Button>
-        </div>
-      </section>
       <section className="relative w-full aspect-[2/1] bg-app-pink/10">
         <button className="absolute bottom-4 right-4 size-12 rounded-full border-2 border-black bg-app-pink-shade flex items-center justify-center p-1">
           <Play size={20} className="fill-black" />
@@ -251,7 +187,7 @@ export default function TutorDetailUI() {
         className="fixed left-0 bottom-0 right-0 h-20 z-50 bg-white p-4"
         style={{ boxShadow: "0 -10px 20px rgba(0, 0, 0, 0.1)" }}
       >
-        <BookTutorCTA schedule={dataSchedule} />
+        <BookTutorCTA />
       </div>
     </div>
   );

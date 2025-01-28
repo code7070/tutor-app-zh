@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "lessons",
+  "collectionName": "appointments",
   "info": {
-    "singularName": "lesson",
-    "pluralName": "lessons",
-    "displayName": "Lesson",
+    "singularName": "appointment",
+    "pluralName": "appointments",
+    "displayName": "appointment",
     "description": ""
   },
   "options": {
@@ -16,28 +16,33 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::student.student",
-      "inversedBy": "lesson"
+      "inversedBy": "appointment"
     },
     "tutor": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::tutor.tutor",
-      "inversedBy": "lesson"
+      "inversedBy": "appointment"
     },
-    "duration": {
-      "type": "string"
+    "schedule": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::schedule.schedule",
+      "mappedBy": "appointment"
     },
-    "start_time": {
-      "type": "datetime"
-    },
-    "statusLesson": {
+    "statusAppointment": {
       "type": "enumeration",
       "enum": [
         "Not Started",
-        "Ongoing",
         "Done",
         "Cancel"
       ]
+    },
+    "doneAt": {
+      "type": "datetime"
+    },
+    "cancelAt": {
+      "type": "datetime"
     }
   }
 }

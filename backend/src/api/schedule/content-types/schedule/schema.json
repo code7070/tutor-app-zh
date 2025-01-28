@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "schedules",
+  "info": {
+    "singularName": "schedule",
+    "pluralName": "schedules",
+    "displayName": "Schedule",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tutor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tutor.tutor",
+      "inversedBy": "schedules"
+    },
+    "date": {
+      "type": "date"
+    },
+    "time": {
+      "type": "time"
+    },
+    "appointment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::appointment.appointment",
+      "inversedBy": "schedule"
+    },
+    "isBooked": {
+      "type": "boolean"
+    }
+  }
+}

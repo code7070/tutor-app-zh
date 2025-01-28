@@ -3,8 +3,8 @@
 import { TFilterTutor, TSortTutor } from "@/lib/types";
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 import useSWR from "swr";
-import { useUserAppContext } from "./user.provider";
 import { IResponseTutors } from "@/lib/response-types";
+import { ICountryContext } from "./useCountry";
 
 const sortList = [
   { name: "Price: higher first", value: "price-higher" },
@@ -40,27 +40,31 @@ const ListViewContext = createContext<IContext>({
   isLoading: false,
 });
 
-export function ListViewProvider({ children }: { children: ReactNode }) {
-  const { country } = useUserAppContext();
-
+export function ListViewProvider({
+  children,
+  country = "",
+}: {
+  children: ReactNode;
+  country?: ICountryContext["country"];
+}) {
   const [sort, setSort] = useState<TSortTutor>("relevance");
   const [filter, setFilter] = useState<TFilterTutor>({
     price: { min: 0, max: 100 },
     isNative: false,
-    countryOfBirth: country.country,
+    countryOfBirth: country,
     isSuperTutor: false,
   });
 
   const queryParams = useMemo(() => {
     return new URLSearchParams({
       sort,
-      lang: country.country,
+      lang: country,
     }).toString();
-  }, [sort, country.country]);
+  }, [sort, country]);
 
   const { data, isLoading } = useSWR(
     `/api/tutor?${queryParams}`,
-    country.country
+    country
       ? async () =>
           (await fetch(`/api/tutor?${queryParams}`).then((res) =>
             res.json(),

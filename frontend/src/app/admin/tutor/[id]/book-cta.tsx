@@ -12,13 +12,8 @@ import { CalendarDays, Zap } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import BookSchedule from "./book-schedule";
-import { IResponseTutorSchedule } from "@/app/api/tutor/[id]/schedule/route";
 
-export default function BookTutorCTA({
-  schedule,
-}: {
-  schedule?: IResponseTutorSchedule;
-}) {
+export default function BookTutorCTA() {
   const [modalType, setModalType] = useState(false);
   const [modalTime, setModalTime] = useState(false);
 
@@ -36,18 +31,18 @@ export default function BookTutorCTA({
     updateParams(true, "book", "choose");
   }
 
-  // function removeParams() {
-  //   updateParams(false, "book", "choose");
-  // }
+  function removeParams() {
+    updateParams(false, "book", "choose");
+  }
 
   function addParamsTime() {
     updateParams(true, "book", "schedule");
   }
 
-  // function removeParamsTime() {
-  //   updateParams(false, "book", "schedule");
-  //   addParams();
-  // }
+  function removeParamsTime() {
+    updateParams(false, "book", "schedule");
+    addParams();
+  }
 
   useEffect(() => {
     if (searchParams.get("book")) {
@@ -109,7 +104,6 @@ export default function BookTutorCTA({
       </Sheet>
       <BookSchedule
         isOpen={modalTime}
-        schedule={schedule}
         onOpenChange={(e) => {
           if (e) addParamsTime();
           else router.back();

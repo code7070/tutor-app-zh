@@ -35,10 +35,10 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "student"
     },
-    "lesson": {
+    "appointment": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::lesson.lesson",
+      "target": "api::appointment.appointment",
       "mappedBy": "student"
     }
   }

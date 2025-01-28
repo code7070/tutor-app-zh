@@ -1,4 +1,4 @@
-import TutorDetailUI from "./ui";
+import TutorDetailAdminEdit from "./ui-edit";
 
 export interface IResponse {
   data?: {
@@ -13,7 +13,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const endpoint = `${process.env.API_ENDPOINT}/api/tutors/${(await params).id}?tutors?fields[0]=name`;
+  const endpoint = `${process.env.API_ENDPOINT}/api/tutors/${(await params).id}`;
   const tutor = (await (await fetch(endpoint)).json()) as IResponse;
   return {
     title: `${tutor.data?.name ? `Tutor App - ${tutor.data.name}` : "Tutor App"}`,
@@ -21,5 +21,5 @@ export async function generateMetadata({
 }
 
 export default function TutorDetailPage() {
-  return <TutorDetailUI />;
+  return <TutorDetailAdminEdit />;
 }
