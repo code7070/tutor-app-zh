@@ -63,6 +63,19 @@
         "videos",
         "audios"
       ]
+    },
+    "isSuperTutor": {
+      "type": "boolean"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": false
+    },
+    "lesson": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::lesson.lesson",
+      "mappedBy": "tutor"
     }
   }
 }

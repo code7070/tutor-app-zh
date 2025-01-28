@@ -69,7 +69,13 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::tutor.tutor",
-      "inversedBy": "user_id"
+      "mappedBy": "user_id"
+    },
+    "student": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::student.student",
+      "mappedBy": "user_id"
     }
   }
 }

@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "lessons",
+  "info": {
+    "singularName": "lesson",
+    "pluralName": "lessons",
+    "displayName": "Lesson",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "student": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::student.student",
+      "inversedBy": "lesson"
+    },
+    "tutor": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::tutor.tutor",
+      "inversedBy": "lesson"
+    },
+    "duration": {
+      "type": "string"
+    },
+    "start_time": {
+      "type": "datetime"
+    },
+    "statusLesson": {
+      "type": "enumeration",
+      "enum": [
+        "Not Started",
+        "Ongoing",
+        "Done",
+        "Cancel"
+      ]
+    }
+  }
+}
