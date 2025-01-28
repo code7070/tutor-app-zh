@@ -12,6 +12,7 @@ import { useMemo, useState } from "react";
 import { addDays, format, formatRelative, isToday, isTomorrow } from "date-fns";
 import { IResponseTutorSchedule } from "@/app/api/tutor/[id]/schedule/route";
 import useTimeGrouping from "./useTimeGrouping";
+import Link from "next/link";
 // import { format as formatTz} from "date-fns-tz"
 
 export default function BookSchedule({
@@ -27,7 +28,6 @@ export default function BookSchedule({
 
   const [daySelected, setDaySelected] = useState(new Date());
 
-  console.log(schedule);
   const timeset = useMemo(() => {
     if (schedule && schedule.data && schedule.data.data.length > 0) {
       return schedule.data.data.filter(
@@ -155,6 +155,19 @@ export default function BookSchedule({
 
             {/* Time Slots */}
             <div className="px-4 space-y-6 max-h-[calc(100vh-350px)] overflow-y-auto pb-40">
+              {timeGroup.length < 1 && (
+                <div className="p-4 rounded-md bg-app-pink-shade/30 flex flex-col gap-3 items-center justify-center">
+                  <div className="font-bold text-xl">Oops!</div>
+                  <div className="w-2/3 mx-auto text-center">
+                    Sorry, there is no available schedule on this day
+                  </div>
+                  <Link href="/user">
+                    <Button size="lg" className="w-full">
+                      Find another mentor
+                    </Button>
+                  </Link>
+                </div>
+              )}
               {timeGroup.map((tg) => {
                 return (
                   <div className="py-4" key={tg.label}>
@@ -176,7 +189,6 @@ export default function BookSchedule({
                   </div>
                 );
               })}
-
               {/* <div className="py-4">
                 <div className="flex items-center gap-2 mb-4">
                   <Sun className="h-5 w-5" />
