@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const fontPrimary = Plus_Jakarta_Sans({
   variable: "--font-primary",
@@ -20,7 +21,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${fontPrimary.variable} antialiased`}>{children}</body>
+      <body className={`${fontPrimary.variable} antialiased`}>
+        {children}
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            classNames: {
+              error: "bg-red-600 text-white border-transparent text-sm",
+              success: "bg-green-600 text-white border-transparent text-sm",
+              warning: "bg-yellow-600 text-white border-transparent text-sm",
+              info: "bg-blue-600 text-white border-transparent text-sm",
+              default: "bg-gray-600 text-white border-transparent text-sm",
+            },
+          }}
+        />
+      </body>
     </html>
   );
 }

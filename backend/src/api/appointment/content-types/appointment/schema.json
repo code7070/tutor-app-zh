@@ -36,13 +36,27 @@
         "Not Started",
         "Done",
         "Cancel"
-      ]
+      ],
+      "default": "Not Started"
     },
     "doneAt": {
       "type": "datetime"
     },
     "cancelAt": {
       "type": "datetime"
+    },
+    "review": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::review.review",
+      "mappedBy": "appointment"
+    },
+    "duration": {
+      "type": "enumeration",
+      "enum": [
+        "dur25",
+        "dur50"
+      ]
     }
   }
 }

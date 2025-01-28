@@ -44,3 +44,102 @@ export async function GET(
   const res = await (await fetch(endpoint)).json();
   return Response.json({ data: res, status: 200 });
 }
+
+export interface ICreateAppointment {
+  schedule: Schedule;
+  appointment: Appointment;
+}
+
+export interface Schedule {
+  data: Data;
+  meta: Meta;
+}
+
+export interface Data {
+  id: number;
+  documentId: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  date: string;
+  time: string;
+  isBooked: boolean;
+}
+
+export interface Appointment {
+  data: Data2;
+  meta: Meta;
+}
+
+export interface Data2 {
+  id: number;
+  documentId: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  statusAppointment: string;
+  doneAt: string;
+  cancelAt: string;
+  duration: string;
+}
+
+export async function POST(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const body = (await req.json()) as { scheduleId: string; duration: string };
+  const { scheduleId = "", duration = "" } = body;
+
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  const studentsId = [
+    "vxfesjbzrgyy76p6eu45yhuy",
+    "tnxe18de0axmtoqn1jl13z8x",
+    "qbqfyaslx1bixlt6y2gktqe1",
+    "kwmacdcsx7lym3g9novqzxuf",
+  ];
+
+  const randStudent = studentsId[Math.floor(Math.random() * studentsId.length)];
+
+  const payloadSchedule = JSON.stringify({
+    data: {
+      isBooked: true,
+    },
+  });
+
+  const payloadAppointment = JSON.stringify({
+    data: {
+      schedule: scheduleId,
+      student: randStudent,
+      tutor: (await params).id,
+      duration: `dur${duration}`,
+    },
+  });
+
+  const schedule = await (
+    await fetch(endpointAPI(`schedules/${scheduleId}`), {
+      headers,
+      method: "PUT",
+      body: payloadSchedule,
+    })
+  ).json();
+
+  const appointment = await (
+    await fetch(endpointAPI(`appointments`), {
+      headers,
+      method: "POST",
+      body: payloadAppointment,
+    })
+  ).json();
+
+  return Response.json({
+    data: {
+      schedule,
+      appointment,
+      success: schedule.data.documentId && appointment.data.documentId,
+    },
+    status: 200,
+  });
+}

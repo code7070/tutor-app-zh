@@ -386,6 +386,7 @@ export interface ApiAppointmentAppointment extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     doneAt: Schema.Attribute.DateTime;
+    duration: Schema.Attribute.Enumeration<['dur25', 'dur50']>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -393,12 +394,49 @@ export interface ApiAppointmentAppointment extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    review: Schema.Attribute.Relation<'oneToOne', 'api::review.review'>;
     schedule: Schema.Attribute.Relation<'oneToOne', 'api::schedule.schedule'>;
     statusAppointment: Schema.Attribute.Enumeration<
       ['Not Started', 'Done', 'Cancel']
-    >;
+    > &
+      Schema.Attribute.DefaultTo<'Not Started'>;
     student: Schema.Attribute.Relation<'oneToOne', 'api::student.student'>;
     tutor: Schema.Attribute.Relation<'oneToOne', 'api::tutor.tutor'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiReviewReview extends Struct.CollectionTypeSchema {
+  collectionName: 'reviews';
+  info: {
+    displayName: 'Review';
+    pluralName: 'reviews';
+    singularName: 'review';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    appointment: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::appointment.appointment'
+    >;
+    comment: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::review.review'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    rating: Schema.Attribute.Integer;
+    student: Schema.Attribute.Relation<'oneToOne', 'api::student.student'>;
+    tutor: Schema.Attribute.Relation<'manyToOne', 'api::tutor.tutor'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -470,6 +508,7 @@ export interface ApiStudentStudent extends Struct.CollectionTypeSchema {
     photo: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     preferLang: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    review: Schema.Attribute.Relation<'oneToOne', 'api::review.review'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -517,6 +556,7 @@ export interface ApiTutorTutor extends Struct.CollectionTypeSchema {
     photo: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     publishedAt: Schema.Attribute.DateTime;
     rating: Schema.Attribute.Decimal;
+    reviews: Schema.Attribute.Relation<'oneToMany', 'api::review.review'>;
     schedules: Schema.Attribute.Relation<'oneToMany', 'api::schedule.schedule'>;
     time_session25: Schema.Attribute.Component<'schedule.session-time', true>;
     time_session50: Schema.Attribute.Component<'schedule.session-time', true>;
@@ -1042,6 +1082,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::appointment.appointment': ApiAppointmentAppointment;
+      'api::review.review': ApiReviewReview;
       'api::schedule.schedule': ApiScheduleSchedule;
       'api::student.student': ApiStudentStudent;
       'api::tutor.tutor': ApiTutorTutor;

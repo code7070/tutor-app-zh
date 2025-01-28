@@ -7,26 +7,37 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Coffee, Moon, Sun, Sunset } from "lucide-react";
+import { ArrowLeft, Coffee, Loader, Moon, Sun, Sunset } from "lucide-react";
 import { useMemo, useState } from "react";
 import { addDays, format, formatRelative, isToday, isTomorrow } from "date-fns";
-import { IResponseTutorSchedule } from "@/app/api/tutor/[id]/schedule/route";
+import {
+  ICreateAppointment,
+  IResponseTutorSchedule,
+} from "@/app/api/tutor/[id]/schedule/route";
 import useTimeGrouping from "./useTimeGrouping";
 import Link from "next/link";
+import { toast } from "sonner";
+import { useParams } from "next/navigation";
 // import { format as formatTz} from "date-fns-tz"
 
 export default function BookSchedule({
   isOpen,
   onOpenChange,
   schedule,
+  onSuccess,
 }: {
   isOpen: boolean;
   onOpenChange: (e: boolean) => void;
-  schedule: IResponseTutorSchedule;
+  schedule?: IResponseTutorSchedule;
+  onSuccess: (data: { data: ICreateAppointment; status: number }) => void;
 }) {
   const [tab, setTab] = useState<"25" | "50">("25");
-
   const [daySelected, setDaySelected] = useState(new Date());
+  const [timeSelected, setTimeSelected] = useState<string>("");
+
+  const [bookLoading, setBookLoading] = useState(false);
+
+  const { id: tutorId } = useParams();
 
   const timeset = useMemo(() => {
     if (schedule && schedule.data && schedule.data.data.length > 0) {
@@ -37,7 +48,9 @@ export default function BookSchedule({
     return [];
   }, [schedule, daySelected]);
 
-  const timeGroup = useTimeGrouping(timeset.map((i) => i.time));
+  const timeGroup = useTimeGrouping(
+    timeset.filter((i) => !i.isBooked).map((i) => i.time),
+  );
 
   const today = new Date();
 
@@ -77,6 +90,31 @@ export default function BookSchedule({
     Evening: <Sunset className="size-5" />,
     Night: <Moon className="size-5" />,
   };
+
+  async function callBook() {
+    setBookLoading(true);
+    const targetTime = timeSelected.substring(11);
+    const found = timeset.find(
+      (i) =>
+        i.date === format(daySelected, "yyy-MM-dd") && i.time === targetTime,
+    );
+    if (found && found.documentId) {
+      const body = JSON.stringify({
+        scheduleId: found.documentId,
+        duration: tab,
+      });
+      const endpoint = `/api/tutor/${tutorId ?? ""}/schedule`;
+      const res = await (
+        await fetch(endpoint, { method: "POST", body })
+      ).json();
+      if (res && res.data && res.data.success) {
+        onSuccess(res);
+      } else toast.error("Booking appointment was failed. Please try again");
+    } else {
+      toast.error("Data isn't complete, booking rejected");
+    }
+    setTimeout(setBookLoading, 1000, false);
+  }
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -176,56 +214,47 @@ export default function BookSchedule({
                       <h3 className="font-semibold">{tg.label}</h3>
                     </div>
                     <div className="grid gap-2">
-                      {tg.timelist.map((time) => (
-                        <Button
-                          key={time}
-                          variant="outline"
-                          className="w-full justify-center py-6"
-                        >
-                          {time.substring(0, 5)}
-                        </Button>
-                      ))}
+                      {tg.timelist.map((time) => {
+                        const schedule = `${format(daySelected, "yyyy-MM-dd")} ${time}`;
+                        const isMe = timeSelected === schedule;
+                        return (
+                          <Button
+                            key={time}
+                            variant={isMe ? "default" : "outline"}
+                            className="w-full justify-center font-semibold"
+                            onClick={() => {
+                              if (isMe) setTimeSelected("");
+                              else setTimeSelected(schedule);
+                            }}
+                          >
+                            {time.substring(0, 5)}
+                          </Button>
+                        );
+                      })}
                     </div>
                   </div>
                 );
               })}
-              {/* <div className="py-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <Sun className="h-5 w-5" />
-                  <h3 className="font-semibold">Afternoon</h3>
-                </div>
-                <div className="grid gap-2">
-                  {timeSlots[tab].afternoon.map((time) => (
-                    <Button
-                      key={time}
-                      variant="outline"
-                      className="w-full justify-center py-6"
-                    >
-                      {time}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="py-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <Moon className="h-5 w-5" />
-                  <h3 className="font-semibold">Evenings</h3>
-                </div>
-                <div className="grid gap-2">
-                  {timeSlots[tab].evening.map((time) => (
-                    <Button
-                      key={time}
-                      variant="outline"
-                      className="w-full justify-center py-6"
-                    >
-                      {time}
-                    </Button>
-                  ))}
-                </div>
-              </div> */}
             </div>
           </div>
+        </div>
+        <div
+          className="py-4 px-8 bg-white absolute left-0 bottom-0 right-0 w-full"
+          style={{ boxShadow: "0 -10px 20px rgba(0, 0, 0, 0.1)" }}
+        >
+          {bookLoading ? (
+            <Loader className="size-7 animate-spin mx-auto" />
+          ) : (
+            <Button
+              variant="app-pink"
+              size="lg"
+              disabled={timeGroup.length < 1 || !timeSelected}
+              onClick={callBook}
+              className="max-w-sm mx-auto block"
+            >
+              Book tutor
+            </Button>
+          )}
         </div>
       </SheetContent>
     </Sheet>
