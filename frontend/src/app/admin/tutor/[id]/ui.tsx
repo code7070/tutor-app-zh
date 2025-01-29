@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { IResponseTutorDetail } from "@/lib/response-types";
 import { getCountry, getFlagEmoji } from "@/lib/utils";
-import { BadgeCheck, Play, ShieldCheck, Star, TrendingUp } from "lucide-react";
+import { BadgeCheck, ShieldCheck, Star, TrendingUp } from "lucide-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 import PlaceholderTutorDetail from "./placeholder";

@@ -7,7 +7,6 @@ import {
   ArrowLeft,
   BadgeCheck,
   Heart,
-  Play,
   Share,
   ShieldCheck,
   Star,
