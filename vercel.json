@@ -1,5 +1,4 @@
 {
   "outputDirectory": "dist",
-  "buildCommand": "cd frontend && npm run build",
-  "ignoreCommand": "git diff HEAD^ HEAD --quiet . && exit 1 || exit 0"
+  "buildCommand": "cd frontend && npm run build"
 }
