@@ -1,7 +1,10 @@
 import { endpointAPI } from "@/lib/utils";
 
-export async function GET() {
-  const tutors = (await (
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const paramsPos = searchParams.get("pos");
+  const pos = parseInt(paramsPos ?? "0");
+  const resTutors = (await (
     await fetch(endpointAPI("tutors?fields[0]=documentId&fields[1]=name"))
   ).json()) as { data: [{ id: number; documentId: string; name: string }] };
   const setlist = [
@@ -94,8 +97,30 @@ export async function GET() {
     { date: "2025-02-05", time: "19:00:00" },
     { date: "2025-02-05", time: "20:00:00" },
   ];
+  const tutorTarget = [resTutors.data[pos]];
+  const payloadSchedule = tutorTarget.flatMap((tutor) => {
+    return setlist.map((set) => {
+      return {
+        tutor: tutor.documentId,
+        date: set.date,
+        time: set.time,
+        isBooked: false,
+      };
+    });
+  });
+  async function singleFetch(data: (typeof payloadSchedule)[0]) {
+    return await fetch(endpointAPI("schedules"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data }),
+    });
+  }
+  const fetches = await Promise.all(
+    payloadSchedule.map(async (e) => await singleFetch(e)),
+  ).then((res) => res.map((r) => r.json()));
+
   return Response.json({
-    tutors,
-    setlist,
+    tutor: tutorTarget,
+    res: fetches,
   });
 }

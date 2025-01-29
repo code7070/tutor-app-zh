@@ -30,7 +30,7 @@ export async function GET(request: Request) {
       isVerified: i.isVerified,
       user_id: i.user_id,
       languagesSpoken: i.languagesSpoken,
-      photo: `${i.photo.url}`,
+      photo: `${process.env.MEDIA_ENDPOINT}${i.photo.url}`,
       isSuperTutor: i.isSuperTutor,
     })),
   };
