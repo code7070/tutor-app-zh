@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { DatePicker } from "@/components/ui/date-picker";
+// import { DatePicker } from "@/components/ui/date-picker";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 import { IResponseTutorDetail } from "@/lib/response-types";
@@ -35,9 +35,6 @@ export default function TutorDetailAdminEdit() {
   //
   //
 
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date(),
-  );
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
 
   const timeSlots25 = [
@@ -149,7 +146,7 @@ export default function TutorDetailAdminEdit() {
               </TabsContent>
               <TabsContent value="50">
                 <div className="mt-2">
-                  <DatePicker date={selectedDate} setDate={setSelectedDate} />
+                  {/* <DatePicker date={selectedDate} setDate={setSelectedDate} /> */}
                 </div>
                 <div className="mt-4 grid grid-cols-3 gap-2">
                   {timeSlots50.map((slot) => (
