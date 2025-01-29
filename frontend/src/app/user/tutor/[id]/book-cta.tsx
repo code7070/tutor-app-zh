@@ -100,38 +100,42 @@ export default function BookTutorCTA({
         }}
       >
         <SheetTrigger asChild>
-          <Button variant="app-pink" size="lg">
-            Book tutor
-          </Button>
+          <div className="main-content">
+            <Button variant="app-pink" size="lg">
+              Book tutor
+            </Button>
+          </div>
         </SheetTrigger>
         <SheetContent side="bottom">
-          <SheetHeader className="mb-4">
-            <SheetTitle className="text-3xl font-bold text-left">
-              When do you want to make your trial?
-            </SheetTitle>
-          </SheetHeader>
-          <div className="flex flex-col gap-3 items-start pb-10">
-            <Button
-              className="!h-auto flex-col items-start gap-1"
-              variant="app-outline"
-            >
-              <Zap className="!size-5" />
-              <div className="font-bold">Right now</div>
-              <div className="font-medium">
-                Book a trial and meet your tutor right now.
-              </div>
-            </Button>
-            <Button
-              className="!h-auto flex-col items-start gap-1"
-              variant="app-outline"
-              onClick={addParamsTime}
-            >
-              <CalendarDays className="!size-5" />
-              <div className="font-bold">Later</div>
-              <div className="font-medium">
-                Choose a date and time that works for you.
-              </div>
-            </Button>
+          <div className="main-content">
+            <SheetHeader className="mb-4">
+              <SheetTitle className="text-3xl font-bold text-left">
+                When do you want to make your trial?
+              </SheetTitle>
+            </SheetHeader>
+            <div className="flex flex-col gap-3 items-start pb-10">
+              <Button
+                className="!h-auto flex-col items-start gap-1"
+                variant="app-outline"
+              >
+                <Zap className="!size-5" />
+                <div className="font-bold">Right now</div>
+                <div className="font-medium">
+                  Book a trial and meet your tutor right now.
+                </div>
+              </Button>
+              <Button
+                className="!h-auto flex-col items-start gap-1"
+                variant="app-outline"
+                onClick={addParamsTime}
+              >
+                <CalendarDays className="!size-5" />
+                <div className="font-bold">Later</div>
+                <div className="font-medium">
+                  Choose a date and time that works for you.
+                </div>
+              </Button>
+            </div>
           </div>
         </SheetContent>
       </Sheet>

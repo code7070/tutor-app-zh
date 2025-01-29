@@ -9,6 +9,7 @@ cd ..
 cd frontend && npm install
 pnpm run develop
 ```
+- make sure select tutor named "David Wilson" or "Ahmad Hasan" or  "Budi Santoso" if want to do making appointment
 
 ---
 
