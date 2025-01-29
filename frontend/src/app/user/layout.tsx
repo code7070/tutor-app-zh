@@ -9,7 +9,7 @@ export default function UserLayout({
   return (
     <UserAppProvider>
       <div className="pb-24">
-        {children}
+        <div className="main-content">{children}</div>
         <Navbar />
       </div>
     </UserAppProvider>

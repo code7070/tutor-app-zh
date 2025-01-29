@@ -56,7 +56,7 @@ export default function TutorDetailUI() {
     };
   });
 
-  const { data: dataSchedule, isLoading: isLoadingSchedule } = useSWR(
+  const { data: dataSchedule } = useSWR(
     `/tutor/${params.id}/schedule`,
     async () =>
       await fetcherSchedule(
@@ -102,6 +102,7 @@ export default function TutorDetailUI() {
       <section className="px-4">
         <div className="py-4 flex gap-3 items-start border-b">
           <div className="size-20 rounded-lg overflow-hidden">
+            {/* eslint-disable @next/next/no-img-element */}
             <img
               alt={tutor?.name}
               src={tutor?.photo}

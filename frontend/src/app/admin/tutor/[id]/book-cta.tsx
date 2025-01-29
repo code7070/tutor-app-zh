@@ -31,18 +31,18 @@ export default function BookTutorCTA() {
     updateParams(true, "book", "choose");
   }
 
-  function removeParams() {
-    updateParams(false, "book", "choose");
-  }
+  // function removeParams() {
+  //   updateParams(false, "book", "choose");
+  // }
 
   function addParamsTime() {
     updateParams(true, "book", "schedule");
   }
 
-  function removeParamsTime() {
-    updateParams(false, "book", "schedule");
-    addParams();
-  }
+  // function removeParamsTime() {
+  //   updateParams(false, "book", "schedule");
+  //   addParams();
+  // }
 
   useEffect(() => {
     if (searchParams.get("book")) {

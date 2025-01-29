@@ -1,0 +1,45 @@
+version: "3"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "1337:1337"
+    environment:
+      - NODE_ENV=production
+      - DATABSE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABSE_NAME=strapi
+      - DATABSE_USERNAME=strapi
+      - DATABASE_PASSWORD=strapipass
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+      - /app/node_module
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - API_ENDPOINT=http://localhost:1337
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=strapi
+      - POSTGRES_USER=strapi
+      - POSTGRES_PASSWORD=strapipass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:

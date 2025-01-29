@@ -17,6 +17,7 @@ export default function TutorListView() {
           className="bg-white flex flex-col items-start gap-3 p-4  hover:bg-app-pink-shade/10"
         >
           <div className="flex items-start gap-4 w-full">
+            {/* eslint-disable @next/next/no-img-element */}
             <img className="size-16 rounded-md" alt={i.name} src={i.photo} />
             <div className="relative w-full flex flex-col items-start gap-2 pr-2">
               <div className="text-xl font-bold flex gap-1 flex-wrap items-center">

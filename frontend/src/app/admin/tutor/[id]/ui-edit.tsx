@@ -39,7 +39,6 @@ export default function TutorDetailAdminEdit() {
     new Date(),
   );
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
-  const [selectedTimeSlots50, setSelectedTimeSlots50] = useState<string[]>([]);
 
   const timeSlots25 = [
     "11:00",
@@ -91,6 +90,7 @@ export default function TutorDetailAdminEdit() {
         <section className="px-4">
           <div className="py-4 flex gap-3 items-start border-b">
             <div className="size-20 rounded-lg overflow-hidden">
+              {/* eslint-disable @next/next/no-img-element */}
               <img
                 alt={tutor?.name}
                 src={tutor?.photo}
