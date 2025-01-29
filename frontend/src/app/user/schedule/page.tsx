@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import ListSchedule from "./list.schedule";
 
 export default function SchedulePage() {
   return (
@@ -19,6 +20,9 @@ export default function SchedulePage() {
         <Link href="/user">
           <Button variant={"app-pink"}>Find a tutor</Button>
         </Link>
+      </section>
+      <section>
+        <ListSchedule />
       </section>
     </div>
   );

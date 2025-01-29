@@ -28,7 +28,7 @@ export async function GET(
       rating: res.data.rating,
       isRefundable: res.data.isRefundable,
       isVerified: res.data.isVerified,
-      photo: `${res.data.photo.url}`,
+      photo: `${process.env.MEDIA_ENDPOINT}${res.data.photo.url}`,
       introVideo: `${res.data.introVideo}`,
     } as IResponseTutorDetail["data"],
   };

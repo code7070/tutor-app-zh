@@ -22,6 +22,8 @@ interface Tutor {
   id: number;
   documentId: string;
   name: string;
+  photo: { url: string };
+  nativeLanguage?: string;
 }
 
 interface Schedule {
@@ -37,11 +39,31 @@ export async function GET(
 ) {
   const appointmentId = (await params).id;
   const fields = `fields[0]=id&fields[1]=documentId&fields[2]=duration`;
-  const tutor = `populate[tutor][fields][0]=documentId&populate[tutor][fields][1]=name`;
+  const tutor = `populate[tutor]=photo&populate[tutor][fields][0]=documentId&populate[tutor][fields][1]=name&populate[tutor][fields][2]=nativeLanguage`;
   const schedule = `populate[schedule][fields][0]=documentId&populate[schedule][fields][1]=date&populate[schedule][fields][2]=time`;
   const endpoint = endpointAPI(
     `appointments/${appointmentId}?${fields}&${tutor}&${schedule}`,
   );
   const res = await (await fetch(endpoint)).json();
-  return Response.json({ data: res, status: 200 });
+  const tutorData = await fetch(
+    endpointAPI(
+      `tutors/${res.data.tutor.documentId}?fields[0]=documentId&fields[1]=name&fields[2]=nativeLanguage&populate=photo`,
+    ),
+  ).then((res) => res.json());
+  return Response.json({
+    data: {
+      ...res,
+      data: {
+        ...res.data,
+        tutor: {
+          ...tutorData.data,
+          photo: {
+            ...tutorData.data.photo,
+            url: `${process.env.MEDIA_ENDPOINT}${tutorData.data.photo.url}`,
+          },
+        },
+      },
+    },
+    status: 200,
+  });
 }
