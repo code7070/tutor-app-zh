@@ -39,6 +39,7 @@ interface Daum {
   photo: string;
   isSuperTutor: boolean;
   isActive: boolean;
+  introVideo: string;
 }
 
 interface DaumRaw extends Omit<Daum, "photo"> {

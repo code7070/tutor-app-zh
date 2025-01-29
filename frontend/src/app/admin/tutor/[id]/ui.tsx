@@ -9,6 +9,7 @@ import useSWR from "swr";
 import PlaceholderTutorDetail from "./placeholder";
 import { Badge } from "@/components/ui/badge";
 import BookTutorCTA from "./book-cta";
+import VideoIntro from "@/components/app/video";
 
 async function fetcher(
   id?: string,
@@ -30,10 +31,9 @@ export default function TutorDetailUI() {
 
   return (
     <div>
-      <section className="relative w-full aspect-[2/1] bg-app-pink/10">
-        <button className="absolute bottom-4 right-4 size-12 rounded-full border-2 border-black bg-app-pink-shade flex items-center justify-center p-1">
-          <Play size={20} className="fill-black" />
-        </button>
+      <section className="relative">
+        {tutor?.introVideo && <VideoIntro src={tutor.introVideo} />}
+        {tutor?.introVideo}
       </section>
       <section className="px-4">
         <div className="py-4 flex gap-3 items-start border-b">

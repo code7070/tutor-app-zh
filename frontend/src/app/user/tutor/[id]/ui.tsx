@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import BookTutorCTA from "./book-cta";
 import { addDays, format, isToday } from "date-fns";
 import { IResponseTutorSchedule } from "@/app/api/tutor/[id]/schedule/route";
+import VideoIntro from "@/components/app/video";
 
 async function fetcher(
   id?: string,
@@ -67,6 +68,9 @@ export default function TutorDetailUI() {
 
   const tutor = data?.data.data;
 
+  const defVideo =
+    "https://videos.pexels.com/video-files/3196292/3196292-uhd_2560_1440_25fps.mp4";
+
   if (isLoading) return <PlaceholderTutorDetail />;
 
   return (
@@ -94,10 +98,12 @@ export default function TutorDetailUI() {
           </Button>
         </div>
       </section>
-      <section className="relative w-full aspect-[2/1] bg-app-pink/10">
-        <button className="absolute bottom-4 right-4 size-12 rounded-full border-2 border-black bg-app-pink-shade flex items-center justify-center p-1">
-          <Play size={20} className="fill-black" />
-        </button>
+      <section className="relative">
+        <VideoIntro
+          src={
+            tutor?.introVideo === "null" ? defVideo : (tutor?.introVideo ?? "")
+          }
+        />
       </section>
       <section className="px-4">
         <div className="py-4 flex gap-3 items-start border-b">

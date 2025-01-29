@@ -543,6 +543,8 @@ export interface ApiTutorTutor extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     experienceInYears: Schema.Attribute.Integer;
     feePerLesson: Schema.Attribute.Integer;
+    introVideo: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'https://videos.pexels.com/video-files/3196292/3196292-uhd_2560_1440_25fps.mp4'>;
     isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     isRefundable: Schema.Attribute.Boolean;
     isSuperTutor: Schema.Attribute.Boolean;

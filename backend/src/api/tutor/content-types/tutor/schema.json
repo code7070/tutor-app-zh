@@ -98,6 +98,10 @@
       "relation": "oneToMany",
       "target": "api::review.review",
       "mappedBy": "tutor"
+    },
+    "introVideo": {
+      "type": "string",
+      "default": "https://videos.pexels.com/video-files/3196292/3196292-uhd_2560_1440_25fps.mp4"
     }
   }
 }

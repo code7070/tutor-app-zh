@@ -29,6 +29,7 @@ export async function GET(
       isRefundable: res.data.isRefundable,
       isVerified: res.data.isVerified,
       photo: `${res.data.photo.url}`,
+      introVideo: `${res.data.introVideo}`,
     } as IResponseTutorDetail["data"],
   };
 
