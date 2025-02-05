@@ -9,9 +9,16 @@ export async function GET(request: Request) {
   const sort = paramSort as TSortTutor;
 
   const endpoint = endpointAPI("tutors?populate=*");
-  const res = (await fetch(endpoint).then((res) =>
-    res.json(),
-  )) as IResponseTutorsRaw;
+  const res = (await fetch(endpoint)
+    .then((res) => res.json())
+    .catch(() => {
+      const errorResponse = {
+        status: 500,
+        error: "Internal Server Error",
+        message: "Failed to fetch data from API",
+      };
+      return errorResponse;
+    })) as IResponseTutorsRaw;
 
   const crafted = {
     meta: res.meta,

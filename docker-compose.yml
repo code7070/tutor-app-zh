@@ -1,5 +1,15 @@
 version: "3"
 services:
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=strapi
+      - POSTGRES_USER=strapi
+      - POSTGRES_PASSWORD=strapipass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   backend:
     build:
       context: ./backend
@@ -25,21 +35,12 @@ services:
     ports:
       - "3000:3000"
     environment:
+      - NODE_ENV=production
       - API_ENDPOINT=http://localhost:1337
     depends_on:
       - backend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-  db:
-    image: postgres:15
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=strapi
-      - POSTGRES_USER=strapi
-      - POSTGRES_PASSWORD=strapipass
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
 volumes:
   postgres_data:
+networks:
+  default:
+    driver: bridge

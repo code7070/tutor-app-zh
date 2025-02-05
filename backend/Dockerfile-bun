@@ -1,0 +1,23 @@
+FROM oven/bun:alpine AS builder
+
+RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev git
+
+WORKDIR /app
+
+COPY package.json bun.lockb ./
+
+RUN bun install --frozen-lockfile
+
+COPY . .
+
+RUN bun run build --debug
+
+FROM oven/bun:latest AS runner
+
+WORKDIR /app
+
+COPY --from=builder /app .
+
+EXPOSE 1337
+
+CMD ["bun", "run", "develop"]
