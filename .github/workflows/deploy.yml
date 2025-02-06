@@ -1,11 +1,14 @@
 name: Tutor App Deployment
+
 on:
   push:
     branches:
       - main
+
 jobs:
   build-and-deplou:
     runs-on: ubuntu-20.04
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -47,7 +50,7 @@ jobs:
       - name: Build and Push Docker Images
         run: |
           docker compose build
-          docker compose push
+          docker compose push jojocontainer
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
