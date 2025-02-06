@@ -27,10 +27,12 @@ jobs:
           API_ENDPOINT_OLD=${{secrets.API_URL}}
           STRAPI_CLOUD_ENDPOINT=${{secrets.STRAPI_ENDPOINT}}
           MEDIA_ENDPOINT=${{secrets.MEDIA_URL}}
+          EOF
 
       - name: Backend
         working-directory: ./backend
         run: |
+          cat > .env << EOF
           HOST=0.0.0.0
           PORT=1337
           APP_KEYS=${{secrets.BACKEND_API_KEYS}}
@@ -40,6 +42,7 @@ jobs:
           DATABASE_SSL=false
           DATABASE_FILENAME=.tmp/data.db
           JWT_SECRET=${{secrets.ADMIN_JWT_SECRET}}
+          EOF
 
       - name: Build and Push Docker Images
         run: |
