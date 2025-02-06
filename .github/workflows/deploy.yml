@@ -39,7 +39,7 @@ jobs:
       - name: Build and Push Docker Images
         run: |
           docker compose build
-          docker compose push jojocontainer/tutor-app
+          docker compose push
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
